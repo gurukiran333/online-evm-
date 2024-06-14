@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Voting System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            border-radius: 10px 10px 0 0;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .candidate {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .candidate label {
+            margin-left: 10px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .results h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .prediction {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .vote-counts {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .vote-counts h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #333;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Advanced AI Voting System</h1>
+        </header>
+        <h2>Vote for Your Candidate</h2>
+        <form id="vote-form">
+            <div class="candidate">
+                <input type="radio" id="candidate1" name="candidate" value="Candidate 1">
+                <label for="candidate1">Candidate 1</label>
+            </div>
+            <div class="candidate">
+                <input type="radio" id="candidate2" name="candidate" value="Candidate 2">
+                <label for="candidate2">Candidate 2</label>
+            </div>
+            <div class="candidate">
+                <input type="radio" id="candidate3" name="candidate" value="Candidate 3">
+                <label for="candidate3">Candidate 3</label>
+            </div>
+            <button type="button" onclick="submitVote()">Submit Vote</button>
+        </form>
+        <div id="vote-feedback" class="feedback"></div>
+        
+        <div class="results">
+            <h2>Results</h2>
+            <div id="ai-prediction" class="prediction"></div>
+            <div id="vote-counts" class="vote-counts"></div> <!-- Display vote counts here -->
+        </div>
+
+    <script>
+        const votes = {
+            "Candidate 1": 0,
+            "Candidate 2": 0,
+            "Candidate 3": 0
+        };
+
+        function submitVote() {
+            const form = document.getElementById('vote-form');
+            const voteFeedback = document.getElementById('vote-feedback');
+            const selectedCandidate = form.candidate.value;
+            
+            if (selectedCandidate) {
+                votes[selectedCandidate]++;
+                displayResults();
+                displayVoteCounts();
+                voteFeedback.innerHTML = `<p>Thank you for voting for ${selectedCandidate}!</p>`;
+                voteFeedback.style.color = "#4CAF50";
+                form.reset();
+            } else {
+                voteFeedback.innerHTML = `<p>Please select a candidate to vote for.</p>`;
+                voteFeedback.style.color = "#f44336";
+            }
+        }
+
+        function displayResults() {
+            const aiPrediction = document.getElementById('ai-prediction');
+            let maxVotes = 0;
+            let leadingCandidate = '';
+
+            for (const candidate in votes) {
+                if (votes[candidate] > maxVotes) {
+                    maxVotes = votes[candidate];
+                    leadingCandidate = candidate;
+                }
+            }
+
+            aiPrediction.innerHTML = `<p>AI Prediction: Currently leading candidate is <strong>${leadingCandidate}</strong> with ${maxVotes} votes.</p>`;
+        }
+
+        function displayVoteCounts() {
+            const voteCounts = document.getElementById('vote-counts');
+            voteCounts.innerHTML = `
+                <h2>Vote Counts</h2>
+                <ul>
+                    <li>Candidate 1: ${votes["Candidate 1"]} votes</li>
+                    <li>Candidate 2: ${votes["Candidate 2"]} votes</li>
+                    <li>Candidate 3: ${votes["Candidate 3"]} votes</li>
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>
